@@ -14,19 +14,14 @@ import {
   StarIcon,
 } from "lucide-react";
 import { Button } from "../ui/button";
+import { InferSelectModel } from "drizzle-orm";
+import { products } from "@/db/schema";
 
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  tags: string[];
-  votes: number;
-  isFeatured: boolean;
-}
+//drizzle part
+type Product = InferSelectModel<typeof products>;
 
 export default function ProductCard({ product }: { product: Product }) {
-  
-  const hasVoted=false;
+  const hasVoted = false;
 
   return (
     <Link href={`/products/${product.id}`}>
@@ -38,7 +33,7 @@ export default function ProductCard({ product }: { product: Product }) {
                 <CardTitle className="text-lg group-hover:text-primary transition-colors">
                   {product.name}
                 </CardTitle>
-                {product.isFeatured && (
+                {product.voteCount > 100 && (
                   <Badge>
                     <StarIcon className="size-3 fill-current" />
                     Featured
@@ -53,7 +48,13 @@ export default function ProductCard({ product }: { product: Product }) {
                 size="icon-sm"
                 className="h-8 w-8 text-primary hover:bg-primary/20"
               >
-                <ChevronUpIcon className={hasVoted?"bg-primary/10 text-primary hover:bg-primary/20":"hover:bg-primary/10 hover:text-primary"} />
+                <ChevronUpIcon
+                  className={
+                    hasVoted
+                      ? "bg-primary/10 text-primary hover:bg-primary/20"
+                      : "hover:bg-primary/10 hover:text-primary"
+                  }
+                />
               </Button>
               <span className="text-sm font-semibold transition-colors text-foreground">
                 10
@@ -62,17 +63,20 @@ export default function ProductCard({ product }: { product: Product }) {
               <Button
                 variant="ghost"
                 size="icon-sm"
-                className={hasVoted?"hover:text-destructive":"opacity-50 cursor-not-allowed"}
+                className={
+                  hasVoted
+                    ? "hover:text-destructive"
+                    : "opacity-50 cursor-not-allowed"
+                }
               >
                 <ChevronDownIcon className="size-4" />
               </Button>
-
             </div>
           </div>
         </CardHeader>
         <CardFooter>
           <div className="flex items-center gap-2">
-            {product.tags.map((tag) => (
+            {product.tags?.map((tag) => (
               <Badge variant={"secondary"} key={tag}>
                 {tag}
               </Badge>

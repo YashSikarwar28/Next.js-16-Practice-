@@ -3,27 +3,31 @@ import SectionHeader from "../common/section-header";
 import { Button } from "../button";
 import Link from "next/link";
 import ProductCard from "@/components/products/product-card";
+import { getFeaturedProducts } from "@/lib/products/product-select";
 
-const featuredProducts=[
-  {
-    id:1,
-    name:"Kit",
-    description:"Kit Discription",
-    tags:["SaaS","AI","Pricing"],
-    votes:615,
-    isFeatured:true,
-  },
-  {
-    id:2,
-    name:"Kit",
-    description:"Kit Discription",
-    tags:["SaaS","AI","Pricing"],
-    votes:415,
-    isFeatured:false,
-  },
-]
+//hardcoded values
+// const featuredProducts=[
+//   {
+//     id:1,
+//     name:"Kit",
+//     description:"Kit Discription",
+//     tags:["SaaS","AI","Pricing"],
+//     votes:615,
+//     isFeatured:true,
+//   },
+//   {
+//     id:2,
+//     name:"Kit",
+//     description:"Kit Discription",
+//     tags:["SaaS","AI","Pricing"],
+//     votes:415,
+//     isFeatured:false,
+//   },
+// ]
 
-export default function FeaturedProducts() {
+export default async function FeaturedProducts() {
+  const featuredProducts = (await getFeaturedProducts()) ?? [];
+
   return (
     <section className="py-20 bg-muted/20">
       <div className="wrapper">
@@ -40,7 +44,9 @@ export default function FeaturedProducts() {
           </Button>
         </div>
         <div className="grid-wrapper">
-            {featuredProducts.map((product)=><ProductCard product={product} key={product.id}/>)}
+          {featuredProducts.map((product) => (
+            <ProductCard product={product} key={product.id} />
+          ))}
         </div>
       </div>
     </section>
