@@ -1,4 +1,5 @@
 // All products data - matches schema.ts structure
+
 export const allProducts = [
   {
     id: 1,
